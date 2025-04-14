@@ -1,6 +1,6 @@
 {
   "name": "whatbmphotos",
-  "version": "0.0.1",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -10,8 +10,24 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^2.1.2",
+    "@react-native-camera-roll/camera-roll": "^7.10.0",
+    "@react-navigation/bottom-tabs": "^7.3.8",
+    "@react-navigation/native": "^7.1.4",
+    "@react-navigation/native-stack": "^7.3.8",
+    "@reduxjs/toolkit": "^2.6.1",
     "react": "19.0.0",
-    "react-native": "0.78.2"
+    "react-native": "0.78.2",
+    "react-native-encrypted-storage": "^4.0.3",
+    "react-native-fs": "^2.20.0",
+    "react-native-gesture-handler": "^2.25.0",
+    "react-native-image-picker": "^8.2.0",
+    "react-native-image-viewing": "^0.2.2",
+    "react-native-permissions": "^5.3.0",
+    "react-native-safe-area-context": "^5.3.0",
+    "react-native-screens": "^4.10.0",
+    "react-native-toast-message": "^2.2.1",
+    "react-redux": "^9.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -26,6 +42,7 @@
     "@react-native/typescript-config": "0.78.2",
     "@types/jest": "^29.5.13",
     "@types/react": "^19.0.0",
+    "@types/react-native": "^0.72.8",
     "@types/react-test-renderer": "^19.0.0",
     "eslint": "^8.19.0",
     "jest": "^29.6.3",

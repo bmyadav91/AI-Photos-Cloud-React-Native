@@ -1,4 +1,13 @@
 {
   "name": "whatbmphotos",
-  "displayName": "whatbmphotos"
+  "displayName": "WhatBM Photos",
+  "version": "1.1.0",
+  "scheme": "whatbmphotos",
+  "icon": "./assets/images/logo.png",
+  "android": {
+    "package": "com.whatbmphotos"
+  },
+  "ios": {
+    "bundleIdentifier": "com.whatbmphotos"
+  }
 }

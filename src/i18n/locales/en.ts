@@ -1,0 +1,25 @@
+export default {
+  login: {
+    email_placeholder: 'Enter Email',
+    otp_placeholder: 'Enter OTP',
+    name_placeholder: 'Enter your name',
+    verify_otp_btn: 'Verify OTP',
+    send_otp_btn: 'Send OTP',
+    update_name_btn: 'Update Name',
+    or: 'or',
+    loginWithGoogle: 'Login with Google',
+    invalidEmail: 'Please enter a valid email',
+    invalidOtp: 'Please enter a valid OTP',
+    invalidName: 'Please enter a valid name',
+    loginLater: 'Skip',
+    otpSent: 'OTP sent to your email',
+    somethingWentWrong: 'Something went wrong. can you inform us',
+    anErrorOccurred: 'An error occurred. can you inform us',
+    termsAndConditions: 'by sign In, you agree to our Terms and Conditions. ',
+  },
+  languages: {
+    english: 'English',
+    hinglish: 'Hinglish',
+    hindi: 'Hindi',
+  },
+}; 

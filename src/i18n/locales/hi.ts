@@ -1,0 +1,25 @@
+export default {
+  login: {
+    email_placeholder: 'अपना ईमेल लिखें',
+    otp_placeholder: 'भेजा गया ओ.टी.पी लिखें',
+    name_placeholder: 'अपना नाम लिखें',
+    verify_otp_btn: 'ओटीपी सत्यापित करें',
+    send_otp_btn: 'ओटीपी भेजें',
+    update_name_btn: 'नाम अपडेट करें',
+    loginLater: 'स्किप करें',
+    otpSent: 'आपके ईमेल पर ओटीपी भेजा गया है',
+    or: 'या फिर',
+    loginWithGoogle: 'गूगल से लॉगिन करें',
+    invalidEmail: 'कृपया अपना सही ईमेल डालें।',
+    invalidOtp: 'कृपया अपना सही ओटीपी डालें।',
+    invalidName: 'कृपया अपना सही नाम डालें।',
+    somethingWentWrong: 'कुछ गलत हो गया है। क्या आप हमें बता सकते हैं',
+    anErrorOccurred: 'एक त्रुटि हो गई है। क्या आप हमें बता सकते हैं',
+    termsAndConditions: 'साइन इन करते हुए, आपको हमारे टर्म्स और कंडीशन को मानना होगा। ',
+  },
+  languages: {
+    english: 'अंग्रेज़ी',
+    hinglish: 'हिंगली',
+    hindi: 'हिंदी',
+  },
+}; 
