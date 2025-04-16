@@ -54,10 +54,10 @@ export default function LoginScreen() {
           if (response.access_token && response.refresh_token) {
             await EncryptedStorage.setItem("access_token", response.access_token);
             await EncryptedStorage.setItem("refresh_token", response.refresh_token);
-            dispatch(setIsAuthenticated(true));
-            setTimeout(() => {
-              navigation.navigate('MainApp', { screen: 'Home' });
-            }, 100);
+            // dispatch(setIsAuthenticated(true));
+            // setTimeout(() => {
+            //   navigation.navigate('MainApp', { screen: 'Home' });
+            // }, 100);
           }
 
           if (response.need_name_update) {

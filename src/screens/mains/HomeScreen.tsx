@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef, Suspense, useMemo } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, ActivityIndicator, Modal, Dimensions, RefreshControl } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, ActivityIndicator, Modal, Dimensions, RefreshControl, useWindowDimensions } from 'react-native';
 import { apiRequest } from "../../../src/services/MainAPI";
 import { getIconSource } from '../../utils/icons';
 import { useNavigation } from '@react-navigation/native';
@@ -209,11 +209,26 @@ const HomeScreen = () => {
     />
   ), [navigation]);
 
+  // const getNumColumns = () => {
+  //   const screenWidth = Dimensions.get('window').width;
+  //   if (screenWidth >= 1000) return 4; // large tablet
+  //   if (screenWidth >= 700) return 3;  // medium tablet
+  //   return 2; // default for phones
+  // };
+
+  const window = useWindowDimensions();
+
+  const getNumColumns = useMemo(() => {
+    if (window.width >= 1000) return 4;
+    if (window.width >= 700) return 3;
+    return 2;
+  }, [window.width]);
+
   // ----------------------------- render photos -----------------------------
 
   const PhotoItem = React.memo(
-    ({ item, index }: { item: any, index: number }) => (
-      <View style={styles.galleryItem}>
+    ({ item, index, itemSize }: { item: any; index: number; itemSize: number }) => (
+      <View style={[styles.galleryItem, { width: itemSize }]}>
         <TouchableOpacity onPress={() => handleImagePreview(index)}>
           <Image
             source={{ uri: item.photo_url }}
@@ -223,26 +238,32 @@ const HomeScreen = () => {
         </TouchableOpacity>
         <View style={styles.iconsContainer}>
           <TouchableOpacity
-            style={[styles.iconButton, deletingPhotoId === item.id && styles.pendingIcon]}
+            style={[
+              styles.iconButton,
+              deletingPhotoId === item.id && styles.pendingIcon,
+            ]}
             disabled={isDeleting.current}
             onPress={() => handleDelete(item.id)}
           >
-            <Image source={getIconSource("trash")} style={styles.imgIcon} />
+            <Image source={getIconSource('trash')} style={styles.imgIcon} />
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.iconButton}
             onPress={() => handleLinking(item.id)}
           >
-            <Image source={getIconSource("person")} style={styles.imgIcon} />
+            <Image source={getIconSource('person')} style={styles.imgIcon} />
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.iconButton, downloadingPhotoId === item.id && styles.pendingIcon]}
+            style={[
+              styles.iconButton,
+              downloadingPhotoId === item.id && styles.pendingIcon,
+            ]}
             disabled={isDownloading.current}
             onPress={() => handleDownload(item.id, item.photo_url)}
           >
-            <Image source={getIconSource("download")} style={styles.imgIcon} />
+            <Image source={getIconSource('download')} style={styles.imgIcon} />
           </TouchableOpacity>
         </View>
       </View>
@@ -250,7 +271,17 @@ const HomeScreen = () => {
     (prevProps, nextProps) => prevProps.item.id === nextProps.item.id
   );
 
-  const renderPhotos = useCallback(({ item, index }: { item: any, index: number }) => <PhotoItem item={item} index={index} />, []);
+  const screenWidth = Dimensions.get('window').width;
+  const itemSize = screenWidth / getNumColumns - (getNumColumns * 2);
+
+  const renderPhotos = useCallback(
+    ({ item, index }: { item: any, index: number }) => (
+      <PhotoItem item={item} index={index} itemSize={itemSize} />
+    ),
+    [itemSize]
+  );
+
+  // const renderPhotos = useCallback(({ item, index }: { item: any, index: number }) => <PhotoItem item={item} index={index} />, []);
 
   // ------------------------ key extractors ------------------------
   const keyExtractor = useCallback((item: any) => item.id.toString(), []);
@@ -266,7 +297,7 @@ const HomeScreen = () => {
   const EmptyRender = () => {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>No photos found</Text>
+        <Text>No photos found - Upload some photos</Text>
       </View>
     );
   };
@@ -318,43 +349,45 @@ const HomeScreen = () => {
           )}
 
           {/* Photos List */}
-          {photos.length > 0 ? (
-            <View style={styles.photosContainer}>
-              <FlatList
-                data={photos}
-                numColumns={2}
-                renderItem={renderPhotos}
-                keyExtractor={keyExtractor}
-                onEndReached={() => fetchPhotos(PhotoPage.current)}
-                onEndReachedThreshold={0.2}
-                ListFooterComponent={<HavingMorePhotos />}
-                ListEmptyComponent={<EmptyRender />}
-                removeClippedSubviews={true}
-                maxToRenderPerBatch={6}
-                windowSize={5}
-                initialNumToRender={8}
-                updateCellsBatchingPeriod={50}
-                refreshControl={
-                  <RefreshControl
-                    refreshing={isRefreshing}
-                    onRefresh={() => {
-                      setIsRefreshing(true);
-                      loadInitialData(true);
-                    }}
-                    colors={['purple']}
-                    tintColor="purple"
-                  />
-                }
-                getItemLayout={(_, index) => ({
-                  length: Dimensions.get('window').width / 2,
-                  offset: (Dimensions.get('window').width / 2) * Math.floor(index / 2),
+          <View style={styles.photosContainer}>
+            <FlatList
+              key={getNumColumns}
+              data={photos}
+              numColumns={getNumColumns}
+              renderItem={renderPhotos}
+              keyExtractor={keyExtractor}
+              onEndReached={() => fetchPhotos(PhotoPage.current)}
+              onEndReachedThreshold={0.2}
+              ListFooterComponent={<HavingMorePhotos />}
+              ListEmptyComponent={<EmptyRender />}
+              removeClippedSubviews={true}
+              maxToRenderPerBatch={6}
+              windowSize={5}
+              initialNumToRender={8}
+              updateCellsBatchingPeriod={50}
+              refreshControl={
+                <RefreshControl
+                  refreshing={isRefreshing}
+                  onRefresh={() => {
+                    setIsRefreshing(true);
+                    loadInitialData(true);
+                  }}
+                  colors={['purple']}
+                  tintColor="purple"
+                />
+              }
+              getItemLayout={(_, index) => {
+                const row = Math.floor(index / getNumColumns);
+                return {
+                  length: itemSize,
+                  offset: itemSize * row,
                   index
-                })}
-                style={{ flex: 1 }}
-                contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center', paddingBottom: 10 }}
-              />
-            </View>
-          ) : null}
+                };
+              }}
+              style={{ flex: 1 }}
+              contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center', paddingBottom: 10 }}
+            />
+          </View>
 
           <Modal visible={isLinkingModal !== null} transparent={true} animationType="fade">
             {isLinkingModal && (
@@ -430,9 +463,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   galleryItem: {
-    width: Dimensions.get('window').width / 2 - 3,
     aspectRatio: 1,
-    margin: 1.5,
+    margin: 2,
     borderRadius: 10,
     overflow: 'hidden',
   },

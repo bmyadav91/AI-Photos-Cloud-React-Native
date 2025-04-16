@@ -31,7 +31,7 @@ const GoogleAuthCallback = () => {
       EncryptedStorage.setItem('refresh_token', refresh_token);
       dispatch(setIsAuthenticated(true));
       setTimeout(() => {
-        navigation.navigate('MainApp', { screen: 'Home' });
+        navigation.replace('MainApp', { screen: 'Home' });
       }, 100);
       return 'Login Success';
     }
